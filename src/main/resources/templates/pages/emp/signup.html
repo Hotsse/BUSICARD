@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/default">
+
+<div layout:fragment="content">
+<script type="text/javascript">
+var romanizeKorName = (name)=>{
+	$.get(`/api/emp/romanize`, {
+		name: name
+	})
+	.done((items) => {
+		console.log(items);
+		
+		htmlText = "";
+		items.forEach((item)=>{
+			htmlText += `<option value="${item.name}">${item.name}</option>`
+		})
+		
+		$("#empNmEn").html(htmlText);
+	});
+}
+
+var getDepts = ()=>{
+	$.get(`/api/emp/depts`)
+	.done((depts) => {
+		console.log(depts);
+		
+		htmlText = "";
+		depts.forEach((dept)=>{
+			htmlText += `<option value="${dept.deptCd}">${dept.deptNm}</option>`
+		})
+		
+		$("#deptCd").html(htmlText);
+	});
+}
+
+var getEmpPoses = ()=>{
+	$.get(`/api/emp/empPoses`)
+	.done((poses) => {
+		console.log(poses);
+		
+		htmlText = "";
+		poses.forEach((pos)=>{
+			htmlText += `<option value="${pos.cmCd}">${pos.cmNm}</option>`
+		})
+		
+		$("#empPosCd").html(htmlText);
+	});
+}
+
+$(document).ready(function(){
+	
+	getDepts();
+	getEmpPoses();
+	
+	$("#empNm").change(function(){
+		empNm = $(this).val();
+		romanizeKorName(empNm);
+	});
+});
+</script>
+
+	<div class="form-group">
+		<label for="empNm">사원명:</label>
+		<input type="text" class="form-control" id="empNm" name="empNm" value="" />
+	</div>
+	<div class="form-group">
+		<label for="empNmEn">사원명(영문):</label>
+		<select class="form-control" id="empNmEn" name="empNmEn">
+			<option>사원명을 먼저 입력해 주세요</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="deptCd">부서:</label>
+		<select class="form-control" id="deptCd" name="deptCd">
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="empPosCd">직급:</label>
+		<select class="form-control" id="empPosCd" name="empPosCd">
+		</select>
+	</div>
+</div>
+
+</html>
