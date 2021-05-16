@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common.common">
+	
+	<select id="getCmCds" parameterType="map" resultType="CmCdVO">
+		SELECT cm_cd as cmCd
+			, cm_nm as cmNm
+			, cm_nm_en as cmNmEn
+		FROM cmcd
+		WHERE cm = #{cm}
+		ORDER BY cm_cd ASC
+	</select>
+	
+</mapper>
