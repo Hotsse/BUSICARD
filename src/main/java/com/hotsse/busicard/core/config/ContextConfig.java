@@ -19,7 +19,7 @@ public class ContextConfig implements WebMvcConfigurer {
 			.allowedOrigins("*")
 			.allowedHeaders("*")
 			.allowedMethods("*")
-			.allowCredentials(true);			
+			.allowCredentials(false);			
 	}
 	
 	@Bean
