@@ -50,6 +50,20 @@ var getEmpPoses = ()=>{
 	});
 }
 
+var insertEmployee = ()=>{
+	
+	$.post(`/api/emp`, {
+		empNo: $("#empNo").val()
+		, empNm: $("#empNm").val()
+		, empNmEn: $("#empNmEn").val()
+		, deptCd: $("#deptCd").val()
+		, empPosCd: $("#empPosCd").val()
+	})
+	.done((data) => {
+		console.log(data);
+	});
+}
+
 $(document).ready(function(){
 	
 	getDepts();
@@ -62,6 +76,10 @@ $(document).ready(function(){
 });
 </script>
 
+	<div class="form-group">
+		<label for="empNo">사번:</label>
+		<input type="text" class="form-control" id="empNo" name="empNo" value="" maxlength="5" />
+	</div>
 	<div class="form-group">
 		<label for="empNm">사원명:</label>
 		<input type="text" class="form-control" id="empNm" name="empNm" value="" />
@@ -82,6 +100,7 @@ $(document).ready(function(){
 		<select class="form-control" id="empPosCd" name="empPosCd">
 		</select>
 	</div>
+	
 </div>
 
 </html>

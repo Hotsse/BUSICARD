@@ -33,6 +33,10 @@ public class EmployeeDao {
 		return this.sqlSession.selectOne("emp.employee.getEmployeeEn", param);
 	}
 	
+	public int insertEmployee(EmployeeVO emp) throws Exception {
+		return this.sqlSession.insert("emp.employee.insertEmployee", emp);
+	}
+	
 	public List<DeptVO> getDepts() throws Exception {
 		return this.sqlSession.selectList("emp.employee.getDepts");
 	}

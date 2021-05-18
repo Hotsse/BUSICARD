@@ -23,6 +23,10 @@ public class EmployeeService {
 		return this.employeeDao.getEmployeeEn(empNo);
 	}
 	
+	public boolean insertEmployee(EmployeeVO emp) throws Exception {
+		return (this.employeeDao.insertEmployee(emp) > 0);
+	}
+	
 	public List<DeptVO> getDepts() throws Exception {
 		return this.employeeDao.getDepts();
 	}

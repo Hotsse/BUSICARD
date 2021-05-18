@@ -27,6 +27,23 @@
 		WHERE e.emp_no = #{empNo}
 	</select>
 	
+	<insert id="insertEmployee" parameterType="EmployeeVO">
+		INSERT INTO emp (
+			emp_no
+			, emp_nm
+			, emp_nm_en
+			, dept_cd
+			, emp_pos_cd
+		)
+		VALUES (
+			#{empNo}
+			, #{empNm}
+			, #{empNmEn}
+			, #{deptCd}
+			, #{empPosCd}
+		)
+	</insert>
+	
 	<select id="getDepts" resultType="DeptVO">
 		SELECT d.dept_cd as deptCd
 			, d.dept_nm as deptNm

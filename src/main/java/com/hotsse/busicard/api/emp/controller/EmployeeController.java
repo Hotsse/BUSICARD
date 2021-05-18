@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +15,12 @@ import com.hotsse.busicard.api.common.service.CommonService;
 import com.hotsse.busicard.api.common.vo.CmCdVO;
 import com.hotsse.busicard.api.emp.service.EmployeeService;
 import com.hotsse.busicard.api.emp.vo.DeptVO;
+import com.hotsse.busicard.api.emp.vo.EmployeeVO;
 import com.hotsse.busicard.trdparty.naver.romanizer.service.NaverRomanizerService;
 import com.hotsse.busicard.trdparty.naver.romanizer.vo.NaverRomanizerItem;
 
 @RestController(value = "apiEmpController")
-@RequestMapping(value = "/api/emp")
+@RequestMapping(value = "/api/emp", produces = "application/json")
 public class EmployeeController {
 
 	@Autowired
@@ -35,6 +38,15 @@ public class EmployeeController {
 		
 		List<NaverRomanizerItem> items = this.romanizerService.getItems(name);
 		return ResponseEntity.ok(items);
+	}
+	
+	@PostMapping(value = "")
+	public ResponseEntity<Void> insertEmployee(
+			@RequestBody(required = true) EmployeeVO emp) throws Exception {
+		System.out.println(emp.toString());
+		
+		return ResponseEntity.noContent()
+				.build();
 	}
 	
 	@GetMapping(value = "/depts")
