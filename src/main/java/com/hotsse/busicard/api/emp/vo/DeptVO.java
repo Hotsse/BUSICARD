@@ -13,7 +13,5 @@ public class DeptVO {
 	private String deptNm;
 	private String deptNmEn;
 	
-	private String deptUpperCd;
-	private String deptUpperNm;
-	private String deptUpperNmEn;
+	private String upperDeptCd;
 }

@@ -26,18 +26,18 @@ public class EmployeeDao {
 		return this.sqlSession.selectOne("emp.employee.getEmployee", param);
 	}
 	
-	public EmployeeVO getEmployeeEn(String empNo) throws Exception {
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("empNo", empNo);
-		
-		return this.sqlSession.selectOne("emp.employee.getEmployeeEn", param);
-	}
-	
 	public int insertEmployee(EmployeeVO emp) throws Exception {
 		return this.sqlSession.insert("emp.employee.insertEmployee", emp);
 	}
 	
 	public List<DeptVO> getDepts() throws Exception {
 		return this.sqlSession.selectList("emp.employee.getDepts");
+	}
+	
+	public DeptVO getDept(String deptCd) throws Exception {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("deptCd", deptCd);
+		
+		return this.sqlSession.selectOne("emp.employee.getDept", param);
 	}
 }

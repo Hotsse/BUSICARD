@@ -6,21 +6,14 @@
 	<select id="getEmployee" parameterType="map" resultType="EmployeeVO">
 		SELECT e.emp_no as empNo
 			, e.emp_nm as empNm
+			, e.emp_nm_en as empNmEn
 			, e.dept_cd as deptCd
 			, e.emp_pos_cd as empPosCd
 			, c.cm_nm as empPosNm
-		FROM emp e
-			LEFT OUTER JOIN cmcd c
-				ON e.emp_pos_cd = c.cm_cd
-		WHERE e.emp_no = #{empNo}
-	</select>
-	
-	<select id="getEmployeeEn" parameterType="map" resultType="EmployeeVO">
-		SELECT e.emp_no as empNo
-			, e.emp_nm_en as empNm
-			, e.dept_cd as deptCd
-			, e.emp_pos_cd as empPosCd
-			, c.cm_nm_en as empPosNm
+			, c.cm_nm_en as empPosNmEn
+			, e.hp as hp
+			, e.tel as tel
+			, e.email as email
 		FROM emp e
 			LEFT OUTER JOIN cmcd c
 				ON e.emp_pos_cd = c.cm_cd
@@ -34,6 +27,9 @@
 			, emp_nm_en
 			, dept_cd
 			, emp_pos_cd
+			, hp
+			, tel
+			, email
 		)
 		VALUES (
 			#{empNo}
@@ -41,14 +37,28 @@
 			, #{empNmEn}
 			, #{deptCd}
 			, #{empPosCd}
+			, #{hp}
+			, #{tel}
+			, #{email}
 		)
 	</insert>
 	
 	<select id="getDepts" resultType="DeptVO">
 		SELECT d.dept_cd as deptCd
 			, d.dept_nm as deptNm
+			, d.dept_nm_en as deptNmEn
+			, d.upper_dept_cd as upperDeptCd
 		FROM dept d
 		ORDER BY d.dept_cd ASC
+	</select>
+	
+	<select id="getDept" parameterType="map" resultType="DeptVO">
+		SELECT d.dept_cd as deptCd
+			, d.dept_nm as deptNm
+			, d.dept_nm_en as deptNmEn
+			, d.upper_dept_cd as upperDeptCd
+		FROM dept d
+		WHERe d.dept_cd = #{deptCd} 
 	</select>
 	
 </mapper>
