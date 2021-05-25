@@ -31,7 +31,6 @@ public class BusicardController {
 			res.setStatus(HttpStatus.BAD_REQUEST.value());
 		}
 		
-		this.busicardService.createBusicard(empNo, cardType);
 		this.busicardService.downloadBusicard(empNo, cardType, res);
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -22,12 +23,16 @@ import com.hotsse.busicard.api.busicard.constants.CardTypeEnum;
 import com.hotsse.busicard.api.emp.service.EmployeeService;
 import com.hotsse.busicard.api.emp.vo.DeptVO;
 import com.hotsse.busicard.api.emp.vo.EmployeeVO;
+import com.hotsse.busicard.trdparty.naver.ocr.service.OcrService;
 
 @Service
 public class BusicardService {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private OcrService ocrService;
 
 	private final String STORATGE_PATH = "C:/storages/BUSICARD";
 	
@@ -73,6 +78,8 @@ public class BusicardService {
 	
 	public void downloadBusicard(String empNo, CardTypeEnum cardType, HttpServletResponse res) throws Exception {
 		
+		this.createBusicard(empNo, cardType);
+		
 		EmployeeVO emp = this.employeeService.getEmployee(empNo);
 		String filePath = String.format("%s/cards/%s_%s/%s_%s_%s.png"
 				, STORATGE_PATH
@@ -91,6 +98,30 @@ public class BusicardService {
 			e.printStackTrace();
 			res.setStatus(HttpStatus.NOT_FOUND.value());
 		}
+	}
+	
+	public EmployeeVO parseBusicard(String empNo, CardTypeEnum cardType) throws Exception {
+		
+		EmployeeVO emp = this.employeeService.getEmployee(empNo);
+		String filePath = String.format("%s/cards/%s_%s/%s_%s_%s.png"
+				, STORATGE_PATH
+				, emp.getEmpNm()
+				, emp.getEmpNo()
+				, emp.getEmpNm()
+				, emp.getEmpNo()
+				, cardType.toString());
+		
+		Map<String, Object> resultMap = this.ocrService.parseBusicard(filePath);
+		
+		EmployeeVO result = EmployeeVO.builder()
+				.empNm(resultMap.get("이름").toString())
+				.empPosNm(resultMap.get("직급").toString())
+				.tel(resultMap.get("사내전화").toString())
+				.hp(resultMap.get("핸드폰").toString())
+				.email(resultMap.get("이메일").toString())
+				.build();
+		
+		return result;
 	}
 	
 	private void createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
