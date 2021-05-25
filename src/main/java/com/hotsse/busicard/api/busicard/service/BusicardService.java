@@ -9,9 +9,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 import com.hotsse.busicard.api.busicard.constants.CardTypeEnum;
 import com.hotsse.busicard.api.emp.service.EmployeeService;
@@ -26,7 +31,7 @@ public class BusicardService {
 
 	private final String STORATGE_PATH = "C:/storages/BUSICARD";
 	
-	public void createBusicard(String empNo) throws Exception {
+	public void createBusicard(String empNo, CardTypeEnum cardType) throws Exception {
 		
 		EmployeeVO emp = this.employeeService.getEmployee(empNo);
 		DeptVO dept = this.employeeService.getDept(emp.getDeptCd());
@@ -40,25 +45,52 @@ public class BusicardService {
 			dept = null;
 		}
 		
-		this.createImage(CardTypeEnum.KO
-				, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
-				, emp.getEmpNm()
-				, (upperDept != null) ? upperDept.getDeptNm() : ""
-				, (dept != null) ? dept.getDeptNm() : ""
-				, emp.getEmpPosNm()
-				, emp.getTel()
-				, emp.getHp()
-				, emp.getEmail());
+		if(cardType == CardTypeEnum.KO) {
+			
+			this.createImage(CardTypeEnum.KO
+					, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
+					, emp.getEmpNm()
+					, (upperDept != null) ? upperDept.getDeptNm() : ""
+					, (dept != null) ? dept.getDeptNm() : ""
+					, emp.getEmpPosNm()
+					, emp.getTel()
+					, emp.getHp()
+					, emp.getEmail());
+		}
+		else if(cardType == CardTypeEnum.EN) {
+			
+			this.createImage(CardTypeEnum.EN
+					, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
+					, emp.getEmpNmEn()
+					, (upperDept != null) ? upperDept.getDeptNmEn() : " "
+					, (dept != null) ? dept.getDeptNmEn() : " "
+					, emp.getEmpPosNmEn()
+					, emp.getTel()
+					, emp.getHp()
+					, emp.getEmail());
+		}
+	}
+	
+	public void downloadBusicard(String empNo, CardTypeEnum cardType, HttpServletResponse res) throws Exception {
 		
-		this.createImage(CardTypeEnum.EN
-				, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
-				, emp.getEmpNmEn()
-				, (upperDept != null) ? upperDept.getDeptNmEn() : ""
-				, (dept != null) ? dept.getDeptNmEn() : ""
-				, emp.getEmpPosNmEn()
-				, emp.getTel()
-				, emp.getHp()
-				, emp.getEmail());
+		EmployeeVO emp = this.employeeService.getEmployee(empNo);
+		String filePath = String.format("%s/cards/%s_%s/%s_%s_%s.png"
+				, STORATGE_PATH
+				, emp.getEmpNm()
+				, emp.getEmpNo()
+				, emp.getEmpNm()
+				, emp.getEmpNo()
+				, cardType.toString());
+		
+		try {
+			FileSystemResource imgFile = new FileSystemResource(filePath.replace("\\\\", "/"));
+			res.setContentType(MediaType.IMAGE_PNG_VALUE);
+			StreamUtils.copy(imgFile.getInputStream(), res.getOutputStream());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			res.setStatus(HttpStatus.NOT_FOUND.value());
+		}
 	}
 	
 	private void createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
@@ -100,7 +132,7 @@ public class BusicardService {
 			graphics.drawImage(cellImg, 420, 215, null);
 			graphics.drawImage(emailImg, 55, 265, null);
 			
-			ImageIO.write(result, "png", new File(filePath + "/" + id + "_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
+			ImageIO.write(result, "png", new File(filePath + "/" + id + "_" + cardType.toString() + ".png"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
