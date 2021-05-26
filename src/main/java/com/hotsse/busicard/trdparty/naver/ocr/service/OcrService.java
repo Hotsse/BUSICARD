@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -27,7 +28,7 @@ public class OcrService {
 	
 	final String CREDENTIALS_PATH = "C:/storages/BUSICARD/credentials/OcrCredentials.json";
 
-	public Map<String, Object> parseBusicard(String filePath) throws Exception {
+	public Map<String, Object> parseBusicard(MultipartFile file) throws Exception {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
@@ -72,7 +73,9 @@ public class OcrService {
 		}
 		
 		bodyBuilder.part("message", message);
-		bodyBuilder.part("file", new FileSystemResource(filePath));
+		bodyBuilder.part("file", new InputStreamResource(file.getInputStream()))
+			.header("Content-Disposition",
+	            String.format("form-data; name=file; filename=%s", file.getOriginalFilename()));
 		
 		String result = webClient
 				.post()

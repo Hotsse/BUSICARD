@@ -7,15 +7,36 @@
 <div layout:fragment="content">
 <script type="text/javascript">
 
-var downloadBusicard = (empNo)=>{
+var parseBusicard = ()=>{
 	
-	$("#busicardKo")
-		.attr("src", `/api/busicard/download/ko?empNo=${empNo}`)
-		.show();
-	$("#busicardEn")
-		.attr("src", `/api/busicard/download/en?empNo=${empNo}`)
-		.show();
+	var form = $('#frmMain')[0];
+    var formData = new FormData(form);
 	
+	$.ajax({
+		type: "POST"
+		, url: "/api/busicard/parse"
+		, enctype: 'multipart/form-data'
+		, data: formData
+		, processData: false
+		, contentType: false
+		, cache: false
+	})
+	.done(function(data) {
+		console.log(data);
+		
+		if(data.empNm) {
+			alert(`이름 : ${data.empNm}\n직급 : ${data.empPosNm}\n내선전화 : ${data.tel}\n핸드폰 : ${data.hp}\n이메일 : ${data.email}`);
+		}
+		else if(data.empNmEn) {
+			alert(`이름 : ${data.empNmEn}\n직급 : ${data.empPosNmEn}\n내선전화 : ${data.tel}\n핸드폰 : ${data.hp}\n이메일 : ${data.email}`);
+		}
+		else {
+			alert("검색 실패");
+		}
+	})
+	.fail(function(err) {
+		console.log(err);
+	});
 }
 
 $(document).ready(function(){
@@ -27,16 +48,15 @@ $(document).ready(function(){
 });
 </script>
 
-
-<div class="form-group">
-	<label for="empNo">사번:</label>
-	<input type="text" class="form-control" id="empNo" name="empNo" value="" maxlength="5" />
-</div>
-
-<div class="form-group">
-	<img src="" id="busicardKo" class="img-responsive m-t-sm" style="border:1px black solid;display:none;">
-	<img src="" id="busicardEn" class="img-responsive m-t-sm" style="border:1px black solid;display:none;">
-</div>
+<form id="frmMain" onsubmit="javascript:return;">
+	<div class="form-group">
+		<label for="empNo">명함:</label>
+		<input type="file" class="form-control" id="uploadFile" name="uploadFile" />
+	</div>
+	<div class="form-group">
+		<button type="button" class="btn btn-block btn-primary" onclick="javascript:parseBusicard();">업로드</button>
+	</div>
+</form>
 
 </div>
 

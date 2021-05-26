@@ -12,4 +12,9 @@ public class BusicardController {
 	public String createBusicard() throws Exception {
 		return "pages/busicard/create";
 	}
+	
+	@GetMapping(value = "/parse")
+	public String parseBusicard() throws Exception {
+		return "pages/busicard/parse";
+	}
 }

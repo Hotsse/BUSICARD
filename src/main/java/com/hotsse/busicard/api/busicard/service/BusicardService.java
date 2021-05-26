@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hotsse.busicard.api.busicard.constants.CardTypeEnum;
 import com.hotsse.busicard.api.emp.service.EmployeeService;
@@ -100,28 +101,31 @@ public class BusicardService {
 		}
 	}
 	
-	public EmployeeVO parseBusicard(String empNo, CardTypeEnum cardType) throws Exception {
+	public EmployeeVO parseBusicard(MultipartFile file) throws Exception {
 		
-		EmployeeVO emp = this.employeeService.getEmployee(empNo);
-		String filePath = String.format("%s/cards/%s_%s/%s_%s_%s.png"
-				, STORATGE_PATH
-				, emp.getEmpNm()
-				, emp.getEmpNo()
-				, emp.getEmpNm()
-				, emp.getEmpNo()
-				, cardType.toString());
+		Map<String, Object> resultMap = this.ocrService.parseBusicard(file);
 		
-		Map<String, Object> resultMap = this.ocrService.parseBusicard(filePath);
+		EmployeeVO emp = null;
+		if(resultMap.get("이름").toString().matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
+			emp = EmployeeVO.builder()
+					.empNm(resultMap.get("이름").toString())
+					.empPosNm(resultMap.get("직급").toString())
+					.tel(resultMap.get("사내전화").toString())
+					.hp(resultMap.get("핸드폰").toString())
+					.email(resultMap.get("이메일").toString())
+					.build();
+		}
+		else {
+			emp = EmployeeVO.builder()
+					.empNmEn(resultMap.get("이름").toString())
+					.empPosNmEn(resultMap.get("직급").toString())
+					.tel(resultMap.get("사내전화").toString())
+					.hp(resultMap.get("핸드폰").toString())
+					.email(resultMap.get("이메일").toString())
+					.build();
+		}
 		
-		EmployeeVO result = EmployeeVO.builder()
-				.empNm(resultMap.get("이름").toString())
-				.empPosNm(resultMap.get("직급").toString())
-				.tel(resultMap.get("사내전화").toString())
-				.hp(resultMap.get("핸드폰").toString())
-				.email(resultMap.get("이메일").toString())
-				.build();
-		
-		return result;
+		return emp;
 	}
 	
 	private void createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
