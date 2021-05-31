@@ -11,7 +11,7 @@ var parseBusicard = ()=>{
 	
 	var form = $('#frmMain')[0];
     var formData = new FormData(form);
-	
+    	
 	$.ajax({
 		type: "POST"
 		, url: "/api/busicard/parse"
@@ -20,6 +20,17 @@ var parseBusicard = ()=>{
 		, processData: false
 		, contentType: false
 		, cache: false
+		, beforeSend: function() {
+			$("#pgDiv").show();
+		}
+		, xhr: function() {
+			xhr = $.ajaxSettings.xhr();
+			xhr.upload.onprogress = function(e){
+				per = e.loaded * 100 / e.total;
+				$("#pgBar").css("width", `${per}%`);
+			};
+			return xhr;
+		}
 	})
 	.done(function(data) {
 		console.log(data);
@@ -36,6 +47,9 @@ var parseBusicard = ()=>{
 	})
 	.fail(function(err) {
 		console.log(err);
+	})
+	.always(function() {
+		$("#pgDiv").hide();
 	});
 }
 
@@ -55,6 +69,11 @@ $(document).ready(function(){
 	</div>
 	<div class="form-group">
 		<button type="button" class="btn btn-block btn-primary" onclick="javascript:parseBusicard();">업로드</button>
+	</div>
+	<div class="form-group" id="pgDiv" style="display:none;">
+		<div class="progress">
+			<div id="pgBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%"></div>
+		</div>
 	</div>
 </form>
 
