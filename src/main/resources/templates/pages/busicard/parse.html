@@ -26,8 +26,12 @@ var parseBusicard = ()=>{
 		, xhr: function() {
 			xhr = $.ajaxSettings.xhr();
 			xhr.upload.onprogress = function(e){
+				console.log(`loaded : ${e.loaded} / total : ${e.total}`)
 				per = e.loaded * 100 / e.total;
 				$("#pgBar").css("width", `${per}%`);
+				if(e.loaded == e.total) {
+					$("#pgBar").text("거의 다 되었습니다. 잠시만 기다려 주세요.");
+				}
 			};
 			return xhr;
 		}
@@ -49,6 +53,8 @@ var parseBusicard = ()=>{
 		console.log(err);
 	})
 	.always(function() {
+		$("#pgBar").css("width", "0%")
+			.empty();
 		$("#pgDiv").hide();
 	});
 }
@@ -72,7 +78,7 @@ $(document).ready(function(){
 	</div>
 	<div class="form-group" id="pgDiv" style="display:none;">
 		<div class="progress">
-			<div id="pgBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%"></div>
+			<div id="pgBar" class="progress-bar progress-bar-striped progress-bar-animated text-center" style="width:0%"></div>
 		</div>
 	</div>
 </form>
