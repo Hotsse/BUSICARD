@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BusicardApplicationTests {
 		
 	@Test
-	void contextLoads() throws Exception {
-		
+	void contextLoads() throws Exception {		
 	}
 }
