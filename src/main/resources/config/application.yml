@@ -28,4 +28,4 @@ logging:
     console: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} : %30logger{5} - %msg%n"
   level:
     root: info
-    com.nexon.busicard: debug
+    com.hotsse.busicard: debug
