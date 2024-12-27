@@ -7,12 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +37,7 @@ public class BusicardService {
 	@Autowired
 	private OcrService ocrService;
 
-	private final String STORATGE_PATH = "C:/storages/BUSICARD";
+	private final String STORATGE_PATH = "/Users/heyho.se/Documents/BUSICARD";
 	
 	public void createBusicard(String empNo, CardTypeEnum cardType) throws Exception {
 		
@@ -140,7 +142,7 @@ public class BusicardService {
 		}
 		
 		try {
-			BufferedImage cardImg = ImageIO.read(new File(STORATGE_PATH + "/sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
+			BufferedImage cardImg = ImageIO.read(this.loadFileFromResources("sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
 			BufferedImage nameImg = this.convertTextToBufferedImage((cardType == CardTypeEnum.KO ? name.replaceAll(".", "$0 ") : name), new Font("다키 B", Font.PLAIN, 42), Color.BLACK);
 			BufferedImage deptImg1 = this.convertTextToBufferedImage(dept1, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
 			BufferedImage deptImg2 = this.convertTextToBufferedImage(dept2, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
@@ -202,5 +204,9 @@ public class BusicardService {
 		}
 		
 		return image;
+	}
+
+	public File loadFileFromResources(String filePath) throws IOException {
+		return new ClassPathResource(filePath).getFile();
 	}
 }
