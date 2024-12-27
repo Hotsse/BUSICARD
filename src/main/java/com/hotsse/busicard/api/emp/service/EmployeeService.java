@@ -2,6 +2,8 @@ package com.hotsse.busicard.api.emp.service;
 
 import java.util.List;
 
+import net.crizin.KoreanCharacter;
+import net.crizin.KoreanRomanizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +33,7 @@ public class EmployeeService {
 		return this.employeeDao.getDept(deptCd);
 	}
 
+	public String getRomanizedName(String name) throws Exception {
+		return KoreanRomanizer.romanize(name, KoreanCharacter.Type.NameTypical);
+	}
 }

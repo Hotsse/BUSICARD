@@ -15,7 +15,7 @@ var romanizeKorName = (name)=>{
 		
 		htmlText = "";
 		items.forEach((item)=>{
-			htmlText += `<option value="${item.name}">${item.name}</option>`
+			htmlText += `<option value="${item}">${item}</option>`
 		})
 		
 		$("#empNmEn").html(htmlText);

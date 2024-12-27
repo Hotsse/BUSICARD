@@ -28,15 +28,12 @@ public class EmployeeController {
 	@Autowired
 	private CommonService commonService;
 	
-	@Autowired
-	private NaverRomanizerService romanizerService;
-	
 	@GetMapping(value = "/romanize")
-	public ResponseEntity<List<NaverRomanizerItem>> getRomanizedItems(
+	public ResponseEntity<List<String>> getRomanizedItems(
 			@RequestParam(name = "name", required = true) String name) throws Exception {
-		
-		List<NaverRomanizerItem> items = this.romanizerService.getItems(name);
-		return ResponseEntity.ok(items);
+
+		String romanizedName = this.employeeService.getRomanizedName(name);
+		return ResponseEntity.ok(List.of(romanizedName));
 	}
 	
 	@PostMapping(value = "")
