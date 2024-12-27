@@ -4,7 +4,7 @@
 - Spring Boot 2.7.18
 - Java 21
 - Maven Build
-- Thymeleaf
+- React 18 + Vite
 - CLOVA OCR
 - H2 Database
 - JDBC MyBatis

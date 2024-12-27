@@ -13,6 +13,8 @@ import com.hotsse.busicard.trdparty.naver.romanizer.vo.NaverRomanizerCredentials
 import com.hotsse.busicard.trdparty.naver.romanizer.vo.NaverRomanizerItem;
 import com.hotsse.busicard.trdparty.naver.romanizer.vo.NaverRomanizerResponse;
 
+//Naver Developer API 에서 2024.01 부로 지원하지 않음
+@Deprecated
 @Service
 public class NaverRomanizerService {
 	

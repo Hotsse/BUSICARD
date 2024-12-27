@@ -1,8 +1,8 @@
 package com.hotsse.busicard.trdparty.naver.romanizer.vo;
 
-import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

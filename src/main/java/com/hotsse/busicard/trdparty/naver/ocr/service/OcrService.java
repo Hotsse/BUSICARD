@@ -26,7 +26,7 @@ import com.hotsse.busicard.trdparty.naver.ocr.vo.OcrResponse;
 @Service(value = "NaverOcrService")
 public class OcrService {
 	
-	final String CREDENTIALS_PATH = "C:/storages/BUSICARD/credentials/OcrCredentials.json";
+	final String CREDENTIALS_PATH = "/Users/heyho.se/Documents/BUSICARD/credentials/OcrCredentials.json";
 
 	public Map<String, Object> parseBusicard(MultipartFile file) throws Exception {
 		

@@ -13,11 +13,6 @@ spring:
     jdbc-url: jdbc:h2:file:./h2/test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: test
     password: 1234
-  devtools:
-    livereload:
-      enabled: true
-  thymeleaf:
-    cache: false
   servlet:
     multipart:
       max-file-size: 100MB
