@@ -17,8 +17,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 @Service
@@ -122,7 +122,7 @@ public class BusicardService {
 	private BufferedImage createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
 
 		try {
-			BufferedImage cardImg = ImageIO.read(this.loadFileFromResources("sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
+			BufferedImage cardImg = ImageIO.read(this.loadFileInputStreamFromResources("sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
 			BufferedImage nameImg = this.convertTextToBufferedImage((cardType == CardTypeEnum.KO ? name.replaceAll(".", "$0 ") : name), new Font("다키 B", Font.PLAIN, 42), Color.BLACK);
 			BufferedImage deptImg1 = this.convertTextToBufferedImage(dept1, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
 			BufferedImage deptImg2 = this.convertTextToBufferedImage(dept2, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
@@ -187,7 +187,7 @@ public class BusicardService {
 		return image;
 	}
 
-	public File loadFileFromResources(String filePath) throws IOException {
-		return new ClassPathResource(filePath).getFile();
+	public InputStream loadFileInputStreamFromResources(String filePath) throws IOException {
+		return new ClassPathResource(filePath).getInputStream();
 	}
 }
