@@ -47,10 +47,15 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # 7. Build Docker Image
-      - name: Build Docker Image
+      # 7. Build Frontend Docker Image
+      - name: Build Frontend Docker Image
         run: |
-          docker build -t ghcr.io/hotsse/busicard:latest .
+          docker build -f docker/fe/Dockerfile -t ghcr.io/hotsse/busicard-fe:latest .
+
+      # 7. Build API Docker Image
+      - name: Build API Docker Image
+        run: |
+          docker build -f docker/api/Dockerfile -t ghcr.io/hotsse/busicard-api:latest .
 
       # 8. Push Docker Image to Docker Hub
       - name: Log in to GitHub Container Registry
@@ -60,6 +65,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Push Docker Image
+      - name: Push Frontend Docker Image
         run: |
-          docker push ghcr.io/hotsse/busicard:latest
+          docker push ghcr.io/hotsse/busicard-fe:latest
+
+      - name: Push API Docker Image
+        run: |
+          docker push ghcr.io/hotsse/busicard-api:latest
