@@ -11,10 +11,24 @@
 - JDBC MyBatis
 - Docker
 
+
 ## Docker 환경 구성
 아래 Container Registry 를 참고하여 테스트
+
+### BUSICARD API 서비스
 - https://github.com/users/Hotsse/packages/container/package/busicard-api
+``` bash
+docker pull ghcr.io/hotsse/busicard-api:latest
+docker run -p 8080:8080 ghcr.io/hotsse/busicard-api:latest
+```
+
+### BUSICARD Frontend 서비스
 - https://github.com/users/Hotsse/packages/container/package/busicard-fe
+``` bash
+docker pull ghcr.io/hotsse/busicard-fe:latest
+docker run -p 80:80 ghcr.io/hotsse/busicard-fe:latest
+```
+
 
 ## 기타
 1. 인증파일 위치 및 샘플
