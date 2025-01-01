@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
-          cache: 'npm'
 
       # 3 Install and Build React Project
       - name: Install and Build React Project
