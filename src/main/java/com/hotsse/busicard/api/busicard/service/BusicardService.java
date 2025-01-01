@@ -124,12 +124,12 @@ public class BusicardService {
 		try {
 			BufferedImage cardImg = ImageIO.read(this.loadFileInputStreamFromResources("sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
 			BufferedImage nameImg = this.convertTextToBufferedImage((cardType == CardTypeEnum.KO ? name.replaceAll(".", "$0 ") : name), new Font("다키 B", Font.PLAIN, 42), Color.BLACK);
-			BufferedImage deptImg1 = this.convertTextToBufferedImage(dept1, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
-			BufferedImage deptImg2 = this.convertTextToBufferedImage(dept2, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
-			BufferedImage rankImg = this.convertTextToBufferedImage(rank, new Font("다키 M", Font.PLAIN, 18), Color.BLACK);
-			BufferedImage telImg = this.convertTextToBufferedImage(tel, new Font("다키 M", Font.PLAIN, 28), Color.BLACK);
-			BufferedImage cellImg = this.convertTextToBufferedImage(cell, new Font("다키 M", Font.PLAIN, 28), Color.BLACK);
-			BufferedImage emailImg = this.convertTextToBufferedImage(email, new Font("다키 M", Font.PLAIN, 28), Color.BLACK);
+			BufferedImage deptImg1 = this.convertTextToBufferedImage(dept1, new Font("Nanum Gothic", Font.PLAIN, 18), Color.BLACK); //한글 지원을 위한 폰트 설정
+			BufferedImage deptImg2 = this.convertTextToBufferedImage(dept2, new Font("Nanum Gothic", Font.PLAIN, 18), Color.BLACK);
+			BufferedImage rankImg = this.convertTextToBufferedImage(rank, new Font("Nanum Gothic", Font.PLAIN, 18), Color.BLACK);
+			BufferedImage telImg = this.convertTextToBufferedImage(tel, new Font("Nanum Gothic", Font.PLAIN, 28), Color.BLACK);
+			BufferedImage cellImg = this.convertTextToBufferedImage(cell, new Font("Nanum Gothic", Font.PLAIN, 28), Color.BLACK);
+			BufferedImage emailImg = this.convertTextToBufferedImage(email, new Font("Nanum Gothic", Font.PLAIN, 28), Color.BLACK);
 			
 			int width = cardImg.getWidth();
 			int height = cardImg.getHeight();

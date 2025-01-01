@@ -1,6 +1,14 @@
 # Use JDK 21 base image
 FROM eclipse-temurin:21-jdk
 
+# Install Korean fonts (Nanum Fonts)
+RUN apt-get update && apt-get install -y \
+    fonts-nanum \
+    && apt-get clean
+
+# Refresh font cache
+RUN fc-cache -fv
+
 # Set working directory
 WORKDIR /app
 
