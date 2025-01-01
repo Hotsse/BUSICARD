@@ -37,7 +37,7 @@ jobs:
       # 5. Build Docker Image
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/busicard:latest .
+          docker build -t ghcr.io/hotsse/busicard:latest .
 
       # 6. Push Docker Image to Docker Hub
       - name: Log in to Docker Hub
@@ -48,4 +48,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.actor }}/busicard:latest
+          docker push ghcr.io/hotsse/busicard:latest
