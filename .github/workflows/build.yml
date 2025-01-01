@@ -28,8 +28,7 @@ jobs:
 
       # 4. Build Frontend Docker Image
       - name: Build Frontend Docker Image
-        run: |
-          docker build -f docker/fe/Dockerfile -t ghcr.io/hotsse/busicard-fe:latest .
+        run: docker build -f docker/fe/Dockerfile -t ghcr.io/hotsse/busicard-fe:latest .
 
       # 5. Push Docker Image to Docker Hub
       - name: Log in to GitHub Container Registry
@@ -40,8 +39,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Push Frontend Docker Image
-        run: |
-          docker push ghcr.io/hotsse/busicard-fe:latest
+        run: docker push ghcr.io/hotsse/busicard-fe:latest
 
   build-api:
     runs-on: ubuntu-latest
@@ -72,8 +70,7 @@ jobs:
 
       # 5. Build API Docker Image
       - name: Build API Docker Image
-        run: |
-          docker build -f docker/api/Dockerfile -t ghcr.io/hotsse/busicard-api:latest .
+        run: docker build -f docker/api/Dockerfile -t ghcr.io/hotsse/busicard-api:latest .
 
       # 6. Push Docker Image to Docker Hub
       - name: Log in to GitHub Container Registry
@@ -84,5 +81,4 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Push API Docker Image
-        run: |
-          docker push ghcr.io/hotsse/busicard-api:latest
+        run: docker push ghcr.io/hotsse/busicard-api:latest
