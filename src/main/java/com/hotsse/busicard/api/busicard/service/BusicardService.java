@@ -1,32 +1,25 @@
 package com.hotsse.busicard.api.busicard.service;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.hotsse.busicard.api.busicard.constants.CardTypeEnum;
 import com.hotsse.busicard.api.emp.service.EmployeeService;
 import com.hotsse.busicard.api.emp.vo.DeptVO;
 import com.hotsse.busicard.api.emp.vo.EmployeeVO;
 import com.hotsse.busicard.trdparty.naver.ocr.service.OcrService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class BusicardService {
@@ -37,14 +30,12 @@ public class BusicardService {
 	@Autowired
 	private OcrService ocrService;
 
-	private final String STORATGE_PATH = "/Users/heyho.se/Documents/BUSICARD";
-	
-	public void createBusicard(String empNo, CardTypeEnum cardType) throws Exception {
-		
+	public BufferedImage createBusicard(String empNo, CardTypeEnum cardType, HttpServletResponse res) throws Exception {
+
 		EmployeeVO emp = this.employeeService.getEmployee(empNo);
 		DeptVO dept = this.employeeService.getDept(emp.getDeptCd());
 		DeptVO upperDept = null;
-		
+
 		if(dept.getUpperDeptCd() != null) {
 			upperDept = this.employeeService.getDept(dept.getUpperDeptCd());
 		}
@@ -52,10 +43,13 @@ public class BusicardService {
 			upperDept = dept;
 			dept = null;
 		}
-		
+
+		res.setContentType(MediaType.IMAGE_PNG_VALUE);
+		BufferedImage image = null;
+
 		if(cardType == CardTypeEnum.KO) {
-			
-			this.createImage(CardTypeEnum.KO
+
+			image = this.createImage(CardTypeEnum.KO
 					, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
 					, emp.getEmpNm()
 					, (upperDept != null) ? upperDept.getDeptNm() : ""
@@ -66,8 +60,8 @@ public class BusicardService {
 					, emp.getEmail());
 		}
 		else if(cardType == CardTypeEnum.EN) {
-			
-			this.createImage(CardTypeEnum.EN
+
+			image = this.createImage(CardTypeEnum.EN
 					, String.format("%s_%s", emp.getEmpNm(), emp.getEmpNo())
 					, emp.getEmpNmEn()
 					, (upperDept != null) ? upperDept.getDeptNmEn() : " "
@@ -77,27 +71,22 @@ public class BusicardService {
 					, emp.getHp()
 					, emp.getEmail());
 		}
+
+		return image;
 	}
 	
 	public void downloadBusicard(String empNo, CardTypeEnum cardType, HttpServletResponse res) throws Exception {
-		
-		this.createBusicard(empNo, cardType);
-		
-		EmployeeVO emp = this.employeeService.getEmployee(empNo);
-		String filePath = String.format("%s/cards/%s_%s/%s_%s_%s.png"
-				, STORATGE_PATH
-				, emp.getEmpNm()
-				, emp.getEmpNo()
-				, emp.getEmpNm()
-				, emp.getEmpNo()
-				, cardType.toString());
-		
-		try {
-			FileSystemResource imgFile = new FileSystemResource(filePath.replace("\\\\", "/"));
-			res.setContentType(MediaType.IMAGE_PNG_VALUE);
-			StreamUtils.copy(imgFile.getInputStream(), res.getOutputStream());
+
+		var image = this.createBusicard(empNo, cardType, res);
+
+		if(ObjectUtils.isEmpty(image))  {
+			res.setStatus(HttpStatus.NOT_FOUND.value());
+			return;
 		}
-		catch(Exception e) {
+
+		try {
+			ImageIO.write(image, "png", res.getOutputStream());
+		} catch (IOException e) {
 			e.printStackTrace();
 			res.setStatus(HttpStatus.NOT_FOUND.value());
 		}
@@ -130,17 +119,8 @@ public class BusicardService {
 		return emp;
 	}
 	
-	private void createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
-		
-		String filePath = STORATGE_PATH + "/cards/" + id;
-		
-		try {
-			new File(filePath).mkdir();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
+	private BufferedImage createImage(CardTypeEnum cardType, String id, String name, String dept1, String dept2, String rank, String tel, String cell, String email) throws Exception {
+
 		try {
 			BufferedImage cardImg = ImageIO.read(this.loadFileFromResources("sample/card/card_" + (cardType == CardTypeEnum.KO ? "ko" : "en") + ".png"));
 			BufferedImage nameImg = this.convertTextToBufferedImage((cardType == CardTypeEnum.KO ? name.replaceAll(".", "$0 ") : name), new Font("다키 B", Font.PLAIN, 42), Color.BLACK);
@@ -168,12 +148,13 @@ public class BusicardService {
 			graphics.drawImage(telImg, 55, 215, null);
 			graphics.drawImage(cellImg, 420, 215, null);
 			graphics.drawImage(emailImg, 55, 265, null);
-			
-			ImageIO.write(result, "png", new File(filePath + "/" + id + "_" + cardType.toString() + ".png"));
+
+			return result;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	private BufferedImage convertTextToBufferedImage(String text, Font font, Color color) throws Exception {
