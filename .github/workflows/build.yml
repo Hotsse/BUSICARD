@@ -24,7 +24,7 @@ jobs:
         working-directory: src/main/app
         run: |
           npm install
-          npm run build
+          npm run build-dev
 
       # 4. Build Frontend Docker Image
       - name: Build Frontend Docker Image
