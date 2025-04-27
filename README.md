@@ -19,14 +19,14 @@
 - https://github.com/users/Hotsse/packages/container/package/busicard-api
 ``` bash
 docker pull ghcr.io/hotsse/busicard-api:latest
-docker run -p 8080:8080 ghcr.io/hotsse/busicard-api:latest
+docker run --platform=linux/amd64 -p 8080:8080 ghcr.io/hotsse/busicard-api:latest
 ```
 
 ### BUSICARD Frontend 서비스
 - https://github.com/users/Hotsse/packages/container/package/busicard-fe
 ``` bash
 docker pull ghcr.io/hotsse/busicard-fe:latest
-docker run -p 80:80 ghcr.io/hotsse/busicard-fe:latest
+docker run --platform=linux/amd64 -p 80:80 ghcr.io/hotsse/busicard-fe:latest
 ```
 
 
@@ -39,5 +39,3 @@ OCR 서비스 Credentials 는 아래와 같은 구조로 이루어져 있습니�
 ```
 
 public repository 인 관계로 악의적인 API 호출이 발생할 수 있어 credentials 을 기본적으로 제공하지 않으니, docker 환경에서 OCR 테스트 해보고자 하신다면 개인 연락처로 연락 바랍니다.
-
-
