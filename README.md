@@ -39,3 +39,15 @@ OCR 서비스 Credentials 는 아래와 같은 구조로 이루어져 있습니�
 ```
 
 public repository 인 관계로 악의적인 API 호출이 발생할 수 있어 credentials 을 기본적으로 제공하지 않으니, docker 환경에서 OCR 테스트 해보고자 하신다면 개인 연락처로 연락 바랍니다.
+
+
+
+## 서비스 미리보기
+
+<img width="250" alt="image" src="https://github.com/user-attachments/assets/ea6dfc0d-1d8b-454c-b00c-05b8527b1da5" />
+<img width="250" alt="image" src="https://github.com/user-attachments/assets/827959c7-24c6-4880-8952-b54a0458d988" />
+<img width="250" alt="image" src="https://github.com/user-attachments/assets/45598993-3632-48f9-96b2-a937227e68b6" />
+
+- 부서, 사원정보 데이터 관리
+- Java GUI 기반으로 사원정보 데이터로 명함 이미지 생성 기능
+- Naver CLOVA OCR API 기반으로 명함 내 정보 자동 분석 기능
